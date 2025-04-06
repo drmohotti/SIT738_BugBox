@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="javascript" href="js/script.js">
+        
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="img/Logo.svg" alt="Bugbox Logo">
+        </div>
+        <div class="header-right">
+            <button class="button">Bot Shop</button>
+            <div class="user-info">
+                <span>Nicola Gaston</span>
+                <img src="img/profile.jpg" alt="Profile Picture">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <li class="active" id="students-btn"><a href="#">Students</a></li>
+                <li id="activities-btn"><a href="#">Activities</a></li>
+                <li id="reports-btn"><a href="#">Reports/Progress</a></li>
+                <li id="freeze-btn"><a href="#">Freeze/Unfreeze</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- Students Section -->
+            <div id="students-section" class="content-section active-section">
+                <h2>Student List</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>STUDENT ID</th>
+                            <th>NAME</th>
+                            <th>EMAIL</th>
+                            <th>PROGRESS</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SCAR01</td>
+                            <td>ALLEN, Scarlet</td>
+                            <td><a href="mailto:scar01@bugboxschool.edu.au">scar01@bugboxschool.edu.au</a></td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 100%;"></div>
+                                </div>
+                            </td>
+                            <td>Completed</td>
+                        </tr>
+                        <tr>
+                            <td>SCAR01</td>
+                            <td>ALLEN, Scarlet</td>
+                            <td><a href="mailto:scar01@bugboxschool.edu.au">scar01@bugboxschool.edu.au</a></td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 100%;"></div>
+                                </div>
+                            </td>
+                            <td>Completed</td>
+                        </tr>
+                        <tr>
+                            <td>SCAR01</td>
+                            <td>ALLEN, Scarlet</td>
+                            <td><a href="mailto:scar01@bugboxschool.edu.au">scar01@bugboxschool.edu.au</a></td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 100%;"></div>
+                                </div>
+                            </td>
+                            <td>Completed</td>
+                        </tr>
+                        <tr>
+                            <td>SCAR01</td>
+                            <td>ALLEN, Scarlet</td>
+                            <td><a href="mailto:scar01@bugboxschool.edu.au">scar01@bugboxschool.edu.au</a></td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 100%;"></div>
+                                </div>
+                            </td>
+                            <td>Completed</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>SCAR01</td>
+                            <td>ALLEN, Scarlet</td>
+                            <td><a href="mailto:scar01@bugboxschool.edu.au">scar01@bugboxschool.edu.au</a></td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 100%;"></div>
+                                </div>
+                            </td>
+                            <td>Completed</td>
+                        </tr>
+                        <tr>
+                            <td>SCAR01</td>
+                            <td>ALLEN, Scarlet</td>
+                            <td><a href="mailto:scar01@bugboxschool.edu.au">scar01@bugboxschool.edu.au</a></td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 100%;"></div>
+                                </div>
+                            </td>
+                            <td>Completed</td>
+                        </tr>
+                        <tr>
+                            <td>SCAR01</td>
+                            <td>ALLEN, Scarlet</td>
+                            <td><a href="mailto:scar01@bugboxschool.edu.au">scar01@bugboxschool.edu.au</a></td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 100%;"></div>
+                                </div>
+                            </td>
+                            <td>Completed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Activities Section -->
+            <div id="activities-section" class="content-section">
+                <h2>Activities</h2>
+                <div class="activity-grid">
+                    <div class="activity-item">Student 1</div>
+                    <div class="activity-item">Student 2</div>
+                    <div class="activity-item">Student 3</div>
+                    <div class="activity-item">Student 4</div>
+                    <div class="activity-item">Student 5</div>
+                    <div class="activity-item">Student 6</div>
+                </div>
+            </div>
+
+            <!-- Freeze/Unfreeze Section -->
+            <div id="freeze-section" class="content-section">
+                <h2>Freeze/Unfreeze</h2>
+                <button
+                    style="background-color: #007bff; color: white; border: none; padding: 20px; font-size: 24px; cursor: pointer; border-radius: 8px;">FREEZE</button>
+                <p>Click the button above to pause all student screens</p>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+
+</html>
