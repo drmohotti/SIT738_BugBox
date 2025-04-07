@@ -1,70 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Character Shadow Match Game</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
       font-family: Arial, sans-serif;
-      background-color: #fafafa;
       display: flex;
+      justify-content: space-around;
       align-items: center;
-      justify-content: center;
       height: 100vh;
-    }
-
-    .game-container {
-      display: flex;
-      gap: 60px;
-      align-items: center;
-      justify-content: center;
-      background: white;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      margin: 0;
+      background-color: #f0f0f0;
     }
 
     .emoji-container {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 10px;
+      margin-left: 50px;
     }
 
     .emoji {
       width: 100px;
       cursor: grab;
-      transition: transform 0.2s;
-    }
-
-    .emoji:active {
-      transform: scale(1.05);
     }
 
     .target-container {
+      border: 1px solid #999;
+      border-radius: 15px;
+      width: 250px;
+      height: 600px;
       display: flex;
       flex-direction: column;
-      gap: 30px;
-      position: relative;
+      justify-content: space-around;
+      align-items: center;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 10px;
     }
 
     .target {
-      width: 140px;
-      height: 140px;
-      border-radius: 20px;
-      background-color: #f0f0f0;
+      width: 120px;
+      height: 120px;
+      background-color: #e0e0e0;
+      border-radius: 10px;
       display: flex;
       justify-content: center;
       align-items: center;
-      position: relative;
       transition: background-color 0.3s;
-    }
-
-    .target img {
-      width: 100%;
-      opacity: 0.4;
-      pointer-events: none;
     }
 
     .target.correct {
@@ -78,7 +63,8 @@
     .modal {
       display: none;
       position: fixed;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
       background: rgba(0, 0, 0, 0.6);
@@ -89,10 +75,9 @@
 
     .modal-content {
       background: white;
-      padding: 30px 50px;
-      border-radius: 15px;
+      padding: 40px;
+      border-radius: 20px;
       text-align: center;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
 
     .modal-content p {
@@ -103,98 +88,107 @@
     .modal-content button {
       padding: 10px 20px;
       background-color: orange;
-      border: none;
-      border-radius: 8px;
       color: white;
+      border: none;
+      border-radius: 10px;
       font-size: 16px;
       cursor: pointer;
     }
   </style>
 </head>
+
 <body>
 
-<div class="game-container">
   <div class="emoji-container">
-    <img id="g1" src="img/a1.png" class="emoji" draggable="true" alt="g1" />
-    <img id="g2" src="img/b1.png" class="emoji" draggable="true" alt="g2" />
-    <img id="g3" src="img/c1.png" class="emoji" draggable="true" alt="g3" />
+    <img id="a1" src="img/a1.png" class="emoji" draggable="true" alt="Emoji A">
+    <img id="b1" src="img/b1.png" class="emoji" draggable="true" alt="Emoji B">
+    <img id="c1" src="img/c1.png" class="emoji" draggable="true" alt="Emoji C">
+    <img id="d1" src="img/d1.png" class="emoji" draggable="true" alt="Emoji D">
+    <img id="e1" src="img/e1.png" class="emoji" draggable="true" alt="Emoji E">
   </div>
 
   <div class="target-container">
-    <div class="target" data-match="g1">
-      <img src="img/a2.png" alt="shadow1" />
+    <div class="target" data-match="a1">
+      <img src="img/a2.png" width="100" />
     </div>
-    <div class="target" data-match="g2">
-      <img src="img/b2.png" alt="shadow2" />
+    <div class="target" data-match="b1">
+      <img src="img/b2.png" width="100" />
     </div>
-    <div class="target" data-match="g3">
-      <img src="img/c2.png" alt="shadow3" />
+    <div class="target" data-match="c1">
+      <img src="img/c2.png" width="100" />
+    </div>
+    <div class="target" data-match="d1">
+      <img src="img/d2.png" width="100" />
+    </div>
+    <div class="target" data-match="e1">
+      <img src="img/e2.png" width="100" />
     </div>
   </div>
-</div>
 
-<!-- Feedback Modal -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <p id="modal-message">Placeholder</p>
-    <button onclick="closeModal()">Try Again</button>
+  <!-- Modal for feedback -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <p id="modal-message"></p>
+      <button onclick="closeModal()">Try Again</button>
+    </div>
   </div>
-</div>
 
-<script>
-  const emojis = document.querySelectorAll('.emoji');
-  const targets = document.querySelectorAll('.target');
-  const modal = document.getElementById('modal');
-  const modalMessage = document.getElementById('modal-message');
-  let currentDraggable = null;
+  <script>
+    let currentDraggable = null;
 
-  emojis.forEach(emoji => {
-    emoji.addEventListener('dragstart', (e) => {
-      currentDraggable = e.target;
-    });
-  });
+    const emojis = document.querySelectorAll('.emoji');
+    const targets = document.querySelectorAll('.target');
+    const modal = document.getElementById('modal');
+    const modalMsg = document.getElementById('modal-message');
 
-  targets.forEach(target => {
-    target.addEventListener('dragover', (e) => {
-      e.preventDefault();
+    emojis.forEach(emoji => {
+      emoji.addEventListener('dragstart', (e) => {
+        currentDraggable = e.target;
+      });
     });
 
-    target.addEventListener('drop', (e) => {
-      e.preventDefault();
-      if (!currentDraggable) return;
+    targets.forEach(target => {
+      target.addEventListener('dragover', (e) => {
+        e.preventDefault();
+      });
 
-      const matchId = target.getAttribute('data-match');
+      target.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (!currentDraggable) return;
 
-      if (currentDraggable.id === matchId) {
-        target.classList.add('correct');
-        target.innerHTML = ''; // remove shadow
-        target.appendChild(currentDraggable);
-        currentDraggable.setAttribute('draggable', false);
+        const matchId = target.getAttribute('data-match');
 
-        if (document.querySelectorAll('.target.correct').length === 3) {
+        if (currentDraggable.id === matchId) {
+          target.classList.add('correct');
+          target.innerHTML = '';
+          target.appendChild(currentDraggable);
+          currentDraggable.setAttribute('draggable', false);
+
+          if (document.querySelectorAll('.target.correct').length === 5) {
+            setTimeout(() => {
+              modalMsg.textContent = '🎉 Great job! You matched all characters!';
+              modal.querySelector('button').textContent = 'Play Again';
+              modal.style.display = 'flex';
+            }, 300);
+          }
+
+        } else {
+          target.classList.add('wrong');
+          modalMsg.textContent = 'Uh oh, that wasn’t the right one.';
+          modal.querySelector('button').textContent = 'Try Again';
+          modal.style.display = 'flex';
           setTimeout(() => {
-            modalMessage.textContent = '🎉 Great job! You matched all characters!';
-            modal.querySelector('button').textContent = 'Play Again';
-            modal.style.display = 'flex';
-          }, 500);
+            target.classList.remove('wrong');
+          }, 1000);
         }
-
-      } else {
-        target.classList.add('wrong');
-        modalMessage.textContent = 'Uh oh, that wasn’t the right one.';
-        modal.querySelector('button').textContent = 'Try Again';
-        modal.style.display = 'flex';
-        setTimeout(() => {
-          target.classList.remove('wrong');
-        }, 1000);
-      }
+      });
     });
-  });
 
-  function closeModal() {
-    modal.style.display = 'none';
-  }
-</script>
+    function closeModal() {
+      modal.style.display = 'none';
+    }
+  </script>
 
 </body>
+
 </html>
