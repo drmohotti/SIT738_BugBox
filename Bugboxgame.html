@@ -7,57 +7,90 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      height: 100vh;
+      background-color: #fff;
       margin: 0;
-      background-color: #f0f0f0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
 
-    .emoji-container {
+    .game-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 80px;
+    }
+
+    .emoji-column {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-left: 50px;
+      gap: 20px;
+      align-items: center;
     }
 
     .emoji {
       width: 100px;
       cursor: grab;
+      transition: transform 0.2s;
     }
 
-    .target-container {
-      border: 1px solid #999;
-      border-radius: 15px;
-      width: 250px;
-      height: 600px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      align-items: center;
-      background-color: #fff;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      padding: 10px;
+    .emoji:active {
+      transform: scale(1.05);
+    }
+
+    .target-board {
+      width: 350px;
+      height: 550px;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      position: relative;
     }
 
     .target {
       width: 120px;
       height: 120px;
-      background-color: #e0e0e0;
-      border-radius: 10px;
+      position: absolute;
       display: flex;
       justify-content: center;
       align-items: center;
       transition: background-color 0.3s;
     }
 
+    .target img {
+      width: 100%;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
     .target.correct {
-      background-color: #c0ffc0;
+      outline: 3px solid #66ff66;
+      border-radius: 15px;
     }
 
     .target.wrong {
-      background-color: #ffc0c0;
+      outline: 3px solid red;
+      border-radius: 15px;
+    }
+
+    /* Placeholders styled according to screenshot */
+    .t1 { top: 30px; left: 30px; }
+    .t2 { top: 40px; right: 30px; }
+    .t3 { top: 200px; left: 90px; }
+    .t4 { top: 350px; left: 30px; }
+    .t5 { top: 360px; right: 30px; }
+
+    .bugbox-logo {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      font-weight: bold;
+      color: #222;
     }
 
     .modal {
@@ -65,9 +98,9 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.6);
+      width: 100vw;
+      background-color: rgba(0,0,0,0.6);
       justify-content: center;
       align-items: center;
       z-index: 10;
@@ -75,8 +108,8 @@
 
     .modal-content {
       background: white;
-      padding: 40px;
-      border-radius: 20px;
+      padding: 30px 50px;
+      border-radius: 15px;
       text-align: center;
     }
 
@@ -87,11 +120,11 @@
 
     .modal-content button {
       padding: 10px 20px;
-      background-color: orange;
+      font-size: 16px;
+      background: orange;
       color: white;
       border: none;
       border-radius: 10px;
-      font-size: 16px;
       cursor: pointer;
     }
   </style>
@@ -99,43 +132,37 @@
 
 <body>
 
-  <div class="emoji-container">
-    <img id="a1" src="img/a1.png" class="emoji" draggable="true" alt="Emoji A">
-    <img id="b1" src="img/b1.png" class="emoji" draggable="true" alt="Emoji B">
-    <img id="c1" src="img/c1.png" class="emoji" draggable="true" alt="Emoji C">
-    <img id="d1" src="img/d1.png" class="emoji" draggable="true" alt="Emoji D">
-    <img id="e1" src="img/e1.png" class="emoji" draggable="true" alt="Emoji E">
-  </div>
+  <div class="game-wrapper">
+    <!-- Draggable Characters -->
+    <div class="emoji-column">
+      <img id="a1" src="img/a1.png" class="emoji" draggable="true" alt="a1" />
+      <img id="b1" src="img/b1.png" class="emoji" draggable="true" alt="b1" />
+      <img id="c1" src="img/c1.png" class="emoji" draggable="true" alt="c1" />
+      <img id="d1" src="img/d1.png" class="emoji" draggable="true" alt="d1" />
+      <img id="e1" src="img/e1.png" class="emoji" draggable="true" alt="e1" />
+    </div>
 
-  <div class="target-container">
-    <div class="target" data-match="a1">
-      <img src="img/a2.png" width="100" />
-    </div>
-    <div class="target" data-match="b1">
-      <img src="img/b2.png" width="100" />
-    </div>
-    <div class="target" data-match="c1">
-      <img src="img/c2.png" width="100" />
-    </div>
-    <div class="target" data-match="d1">
-      <img src="img/d2.png" width="100" />
-    </div>
-    <div class="target" data-match="e1">
-      <img src="img/e2.png" width="100" />
+    <!-- Shadow Board -->
+    <div class="target-board">
+      <div class="target t1" data-match="a1"><img src="img/a2.png" /></div>
+      <div class="target t2" data-match="b1"><img src="img/b2.png" /></div>
+      <div class="target t3" data-match="c1"><img src="img/c2.png" /></div>
+      <div class="target t4" data-match="d1"><img src="img/d2.png" /></div>
+      <div class="target t5" data-match="e1"><img src="img/e2.png" /></div>
+      <div class="bugbox-logo">🐞 BUGBOX Robotics For Curious Minds</div>
     </div>
   </div>
 
-  <!-- Modal for feedback -->
+  <!-- Feedback Modal -->
   <div id="modal" class="modal">
     <div class="modal-content">
-      <p id="modal-message"></p>
+      <p id="modal-message">Placeholder</p>
       <button onclick="closeModal()">Try Again</button>
     </div>
   </div>
 
   <script>
     let currentDraggable = null;
-
     const emojis = document.querySelectorAll('.emoji');
     const targets = document.querySelectorAll('.target');
     const modal = document.getElementById('modal');
@@ -148,16 +175,13 @@
     });
 
     targets.forEach(target => {
-      target.addEventListener('dragover', (e) => {
-        e.preventDefault();
-      });
+      target.addEventListener('dragover', (e) => e.preventDefault());
 
       target.addEventListener('drop', (e) => {
         e.preventDefault();
         if (!currentDraggable) return;
 
         const matchId = target.getAttribute('data-match');
-
         if (currentDraggable.id === matchId) {
           target.classList.add('correct');
           target.innerHTML = '';
@@ -171,15 +195,12 @@
               modal.style.display = 'flex';
             }, 300);
           }
-
         } else {
           target.classList.add('wrong');
-          modalMsg.textContent = 'Uh oh, that wasn’t the right one.';
+          modalMsg.textContent = 'Oops! That’s not the right match.';
           modal.querySelector('button').textContent = 'Try Again';
           modal.style.display = 'flex';
-          setTimeout(() => {
-            target.classList.remove('wrong');
-          }, 1000);
+          setTimeout(() => target.classList.remove('wrong'), 1000);
         }
       });
     });
@@ -190,5 +211,4 @@
   </script>
 
 </body>
-
 </html>
