@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>BUGBOX MINIGAME - Start</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            position: relative;
+        }
+
+        /* LEFT COLUMN */
+        .text-area {
+            max-width: 400px;
+            text-align: left;
+        }
+
+        .text-area h2 {
+            font-weight: normal;
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .text-area p {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* RIGHT COLUMN - CHARACTER BOX */
+        .character-box {
+            width: 350px;
+            height: 500px;
+            border-radius: 20px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+        }
+
+        .character-box img.character {
+            width: 80px;
+            position: absolute;
+        }
+
+        /* Character positions to match your screenshot */
+        .char1 { top: 10px; left: 40px; }
+        .char2 { top: 10px; right: 40px; }
+        .char3 { top: 180px; left: 120px; }
+        .char4 { top: 320px; left: 40px; }
+        .char5 { top: 320px; right: 40px; }
+
+        /* GO PLAY BUTTON */
+        .play-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: orange;
+            color: white;
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        /* ARROW IMAGE */
+        .arrow-img {
+            position: absolute;
+            left: 43%;
+            top: 48%;
+            width: 280px;
+            height: auto;
+            animation: pulse 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+
+        <!-- LEFT COLUMN -->
+        <div class="text-area">
+            <h2>Looks like you are all ready to get started.</h2>
+            <p>Click on Go Play when you are ready!</p>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="character-box">
+            <img src="img/a1.png" alt="char1" class="character char1">
+            <img src="img/b1.png" alt="char2" class="character char2">
+            <img src="img/c1.png" alt="char3" class="character char3">
+            <img src="img/d1.png" alt="char4" class="character char4">
+            <img src="img/e1.png" alt="char5" class="character char5">
+
+            <a href="minigame.html" class="play-btn">Go Play</a>
+        </div>
+
+        <!-- ARROW -->
+        <img src="img/g3_arrow.png" alt="arrow" class="arrow-img">
+
+    </div>
+
+</body>
+
+</html>

@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Character Shadow Match Game</title>
+  <title>BUGBOX MINIGAME</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -69,14 +69,16 @@
     .target.correct {
       outline: 3px solid #66ff66;
       border-radius: 15px;
+      animation: bounce 0.5s;
     }
 
     .target.wrong {
       outline: 3px solid red;
       border-radius: 15px;
+      animation: shake 0.5s;
     }
 
-    /* Placeholders styled according to screenshot */
+    /* Positioning for targets */
     .t1 { top: 30px; left: 30px; }
     .t2 { top: 40px; right: 30px; }
     .t3 { top: 200px; left: 90px; }
@@ -104,6 +106,7 @@
       justify-content: center;
       align-items: center;
       z-index: 10;
+      animation: fadeIn 0.5s;
     }
 
     .modal-content {
@@ -126,6 +129,40 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
+    }
+
+    /* Animations */
+    @keyframes bounce {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.2); }
+      50% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      20% { transform: translateX(-10px); }
+      40% { transform: translateX(10px); }
+      60% { transform: translateX(-10px); }
+      80% { transform: translateX(10px); }
+      100% { transform: translateX(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes wiggle {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      50% { transform: rotate(-5deg); }
+      75% { transform: rotate(5deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    .emoji.wiggle {
+      animation: wiggle 0.5s;
     }
   </style>
 </head>
@@ -161,6 +198,9 @@
     </div>
   </div>
 
+  <!-- Confetti Script -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
+
   <script>
     let currentDraggable = null;
     const emojis = document.querySelectorAll('.emoji');
@@ -171,6 +211,10 @@
     emojis.forEach(emoji => {
       emoji.addEventListener('dragstart', (e) => {
         currentDraggable = e.target;
+
+        // Wiggle animation on drag
+        currentDraggable.classList.add('wiggle');
+        setTimeout(() => currentDraggable.classList.remove('wiggle'), 500);
       });
     });
 
@@ -182,6 +226,7 @@
         if (!currentDraggable) return;
 
         const matchId = target.getAttribute('data-match');
+
         if (currentDraggable.id === matchId) {
           target.classList.add('correct');
           target.innerHTML = '';
@@ -193,13 +238,25 @@
               modalMsg.textContent = '🎉 Great job! You matched all characters!';
               modal.querySelector('button').textContent = 'Play Again';
               modal.style.display = 'flex';
+
+              // 🎊 Confetti!
+              confetti({
+                particleCount: 200,
+                spread: 90,
+                origin: { y: 0.6 }
+              });
             }, 300);
           }
         } else {
+          // Reset shake if already wrong before
+          target.classList.remove('wrong');
+          void target.offsetWidth;
           target.classList.add('wrong');
+
           modalMsg.textContent = 'Oops! That’s not the right match.';
           modal.querySelector('button').textContent = 'Try Again';
           modal.style.display = 'flex';
+
           setTimeout(() => target.classList.remove('wrong'), 1000);
         }
       });
