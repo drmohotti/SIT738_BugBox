@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <title>BUGBOX MINIGAME</title>
@@ -78,7 +77,6 @@
       animation: shake 0.5s;
     }
 
-    /* Positioning for targets */
     .t1 { top: 30px; left: 30px; }
     .t2 { top: 40px; right: 30px; }
     .t3 { top: 200px; left: 90px; }
@@ -131,7 +129,6 @@
       cursor: pointer;
     }
 
-    /* Animations */
     @keyframes bounce {
       0% { transform: scale(1); }
       30% { transform: scale(1.2); }
@@ -166,31 +163,16 @@
     }
   </style>
 </head>
-
 <body>
 
   <div class="game-wrapper">
-    <!-- Draggable Characters -->
-    <div class="emoji-column">
-      <img id="a1" src="img/a1.png" class="emoji" draggable="true" alt="a1" />
-      <img id="b1" src="img/b1.png" class="emoji" draggable="true" alt="b1" />
-      <img id="c1" src="img/c1.png" class="emoji" draggable="true" alt="c1" />
-      <img id="d1" src="img/d1.png" class="emoji" draggable="true" alt="d1" />
-      <img id="e1" src="img/e1.png" class="emoji" draggable="true" alt="e1" />
-    </div>
+    <div class="emoji-column" id="emojiColumn"></div>
 
-    <!-- Shadow Board -->
-    <div class="target-board">
-      <div class="target t1" data-match="a1"><img src="img/a2.png" /></div>
-      <div class="target t2" data-match="b1"><img src="img/b2.png" /></div>
-      <div class="target t3" data-match="c1"><img src="img/c2.png" /></div>
-      <div class="target t4" data-match="d1"><img src="img/d2.png" /></div>
-      <div class="target t5" data-match="e1"><img src="img/e2.png" /></div>
+    <div class="target-board" id="targetBoard">
       <div class="bugbox-logo">🐞 BUGBOX Robotics For Curious Minds</div>
     </div>
   </div>
 
-  <!-- Feedback Modal -->
   <div id="modal" class="modal">
     <div class="modal-content">
       <p id="modal-message">Placeholder</p>
@@ -198,74 +180,124 @@
     </div>
   </div>
 
-  <!-- Confetti Script -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
 
   <script>
     let currentDraggable = null;
-    const emojis = document.querySelectorAll('.emoji');
-    const targets = document.querySelectorAll('.target');
-    const modal = document.getElementById('modal');
-    const modalMsg = document.getElementById('modal-message');
 
-    emojis.forEach(emoji => {
-      emoji.addEventListener('dragstart', (e) => {
-        currentDraggable = e.target;
+    const emojiData = [
+      { id: "a1", src: "img/a1.png", alt: "a1" },
+      { id: "b1", src: "img/b1.png", alt: "b1" },
+      { id: "c1", src: "img/c1.png", alt: "c1" },
+      { id: "d1", src: "img/d1.png", alt: "d1" },
+      { id: "e1", src: "img/e1.png", alt: "e1" },
+    ];
 
-        // Wiggle animation on drag
-        currentDraggable.classList.add('wiggle');
-        setTimeout(() => currentDraggable.classList.remove('wiggle'), 500);
+    const targetData = [
+      { id: "a1", img: "img/a2.png" },
+      { id: "b1", img: "img/b2.png" },
+      { id: "c1", img: "img/c2.png" },
+      { id: "d1", img: "img/d2.png" },
+      { id: "e1", img: "img/e2.png" },
+    ];
+
+    const shuffle = (array) => {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    };
+
+    function initGame() {
+      const emojiColumn = document.getElementById("emojiColumn");
+      const targetBoard = document.getElementById("targetBoard");
+
+      shuffle(emojiData);
+      shuffle(targetData);
+
+      emojiData.forEach(item => {
+        const img = document.createElement("img");
+        img.id = item.id;
+        img.src = item.src;
+        img.alt = item.alt;
+        img.className = 'emoji';
+        img.setAttribute('draggable', true);
+        emojiColumn.appendChild(img);
       });
-    });
 
-    targets.forEach(target => {
-      target.addEventListener('dragover', (e) => e.preventDefault());
+      targetData.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = `target t${index + 1}`;
+        div.setAttribute("data-match", item.id);
 
-      target.addEventListener('drop', (e) => {
-        e.preventDefault();
-        if (!currentDraggable) return;
+        const img = document.createElement("img");
+        img.src = item.img;
+        div.appendChild(img);
 
-        const matchId = target.getAttribute('data-match');
+        targetBoard.insertBefore(div, targetBoard.querySelector('.bugbox-logo'));
+      });
 
-        if (currentDraggable.id === matchId) {
-          target.classList.add('correct');
-          target.innerHTML = '';
-          target.appendChild(currentDraggable);
-          currentDraggable.setAttribute('draggable', false);
+      bindEvents();
+    }
 
-          if (document.querySelectorAll('.target.correct').length === 5) {
-            setTimeout(() => {
-              modalMsg.textContent = '🎉 Great job! You matched all characters!';
-              modal.querySelector('button').textContent = 'Play Again';
-              modal.style.display = 'flex';
+    function bindEvents() {
+      const emojis = document.querySelectorAll('.emoji');
+      const targets = document.querySelectorAll('.target');
+      const modal = document.getElementById('modal');
+      const modalMsg = document.getElementById('modal-message');
 
-              // 🎊 Confetti!
-              confetti({
-                particleCount: 200,
-                spread: 90,
-                origin: { y: 0.6 }
-              });
-            }, 300);
+      emojis.forEach(emoji => {
+        emoji.addEventListener('dragstart', (e) => {
+          currentDraggable = e.target;
+          currentDraggable.classList.add('wiggle');
+          setTimeout(() => currentDraggable.classList.remove('wiggle'), 500);
+        });
+      });
+
+      targets.forEach(target => {
+        target.addEventListener('dragover', (e) => e.preventDefault());
+
+        target.addEventListener('drop', (e) => {
+          e.preventDefault();
+          if (!currentDraggable) return;
+
+          const matchId = target.getAttribute('data-match');
+
+          if (currentDraggable.id === matchId) {
+            target.classList.add('correct');
+            target.innerHTML = '';
+            target.appendChild(currentDraggable);
+            currentDraggable.setAttribute('draggable', false);
+
+            if (document.querySelectorAll('.target.correct').length === 5) {
+              setTimeout(() => {
+                modalMsg.textContent = '🎉 Great job! You matched all characters!';
+                modal.querySelector('button').textContent = 'Play Again';
+                modal.style.display = 'flex';
+                confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 } });
+              }, 300);
+            }
+          } else {
+            target.classList.remove('wrong');
+            void target.offsetWidth;
+            target.classList.add('wrong');
+
+            modalMsg.textContent = 'Oops! That’s not the right match.';
+            modal.querySelector('button').textContent = 'Try Again';
+            modal.style.display = 'flex';
+
+            setTimeout(() => target.classList.remove('wrong'), 1000);
           }
-        } else {
-          // Reset shake if already wrong before
-          target.classList.remove('wrong');
-          void target.offsetWidth;
-          target.classList.add('wrong');
-
-          modalMsg.textContent = 'Oops! That’s not the right match.';
-          modal.querySelector('button').textContent = 'Try Again';
-          modal.style.display = 'flex';
-
-          setTimeout(() => target.classList.remove('wrong'), 1000);
-        }
+        });
       });
-    });
+    }
 
     function closeModal() {
-      modal.style.display = 'none';
+      document.getElementById('modal').style.display = 'none';
+      location.reload(); // Refresh game
     }
-  </script>
 
+    window.onload = initGame;
+  </script>
 </body>
 </html>
